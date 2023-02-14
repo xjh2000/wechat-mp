@@ -8,12 +8,24 @@
         <version>2.3.3.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.binarywang</groupId>
-    <artifactId>wx-java-mp-demo</artifactId>
+    <groupId>org.xjh</groupId>
+    <artifactId>wechat-mp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wx mp demo</name>
-    <description>Demo project for wx mp with spring boot</description>
+    <name>wx mp </name>
+    <description>project for wx mp with spring boot</description>
 
+    <repositories>
+        <repository>
+            <id>spring</id>
+            <url>https://maven.aliyun.com/repository/spring</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -23,6 +35,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>wx-java-mp-spring-boot-starter</artifactId>

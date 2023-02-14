@@ -1,4 +1,4 @@
-package com.binarywang.demo.wx.mp;
+package org.xjh.wechat.mp;
 
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
