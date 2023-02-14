@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 @SpringBootApplication
-public class MpDemoApplication {
+public class MpApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MpDemoApplication.class, args);
+        SpringApplication.run(MpApplication.class, args);
     }
 
     @Autowired
