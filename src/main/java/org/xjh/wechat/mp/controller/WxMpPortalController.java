@@ -53,7 +53,6 @@ public class WxMpPortalController {
             if (outMessage == null) {
                 return "";
             }
-
             out = outMessage.toXml();
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
