@@ -1,6 +1,5 @@
 package org.xjh.wechat.mp.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -10,12 +9,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@AllArgsConstructor
 @RestController
 @RequestMapping("/wx/portal/{appid}")
 public class WxPortalController {
+
     private final WxMpService wxService;
+
     private final WxMpMessageRouter messageRouter;
+
+    public WxPortalController(WxMpService wxService, WxMpMessageRouter messageRouter) {
+        this.wxService = wxService;
+        this.messageRouter = messageRouter;
+    }
 
     @GetMapping(produces = "text/plain;charset=utf-8")
     public String authGet(@PathVariable String appid,
@@ -24,21 +29,21 @@ public class WxPortalController {
                           @RequestParam(name = "nonce", required = false) String nonce,
                           @RequestParam(name = "echostr", required = false) String echostr) {
 
-        log.info("\n接收到来自微信服务器的认证消息：[{}, {}, {}, {}]", signature,
+        log.info("\n receive wechat server verify ：[{}, {}, {}, {}]", signature,
                 timestamp, nonce, echostr);
         if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
-            throw new IllegalArgumentException("请求参数非法，请核实!");
+            throw new IllegalArgumentException("parameter illegal, Please check that ");
         }
 
         if (!this.wxService.switchover(appid)) {
-            throw new IllegalArgumentException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));
+            throw new IllegalArgumentException(String.format("not such appid=[%s]", appid));
         }
 
         if (wxService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
         }
 
-        return "非法请求";
+        return "illegal request";
     }
 
     @PostMapping(produces = "application/xml; charset=UTF-8")
@@ -52,22 +57,22 @@ public class WxPortalController {
                        @RequestParam(name = "msg_signature", required = false) String msgSignature) {
         log.info("""
 
-                        接收微信请求：[openid=[{}], [signature=[{}], encType=[{}], msgSignature=[{}], timestamp=[{}], nonce=[{}], requestBody=[
+                        receive wechat request：[openid=[{}], [signature=[{}], encType=[{}], msgSignature=[{}], timestamp=[{}], nonce=[{}], requestBody=[
                         {}
                         ]\s""",
                 openid, signature, encType, msgSignature, timestamp, nonce, requestBody);
 
         if (!this.wxService.switchover(appid)) {
-            throw new IllegalArgumentException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));
+            throw new IllegalArgumentException(String.format("not such appid=[%s]", appid));
         }
 
         if (!wxService.checkSignature(timestamp, nonce, signature)) {
-            throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
+            throw new IllegalArgumentException("illegal request");
         }
 
         String out = null;
         if (encType == null) {
-            // 明文传输的消息
+            // plaintext transmit
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
             if (outMessage == null) {
@@ -76,10 +81,10 @@ public class WxPortalController {
 
             out = outMessage.toXml();
         } else if ("aes".equalsIgnoreCase(encType)) {
-            // aes加密的消息
+            // aes encrypt message
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
-            log.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+            log.debug("\n decrypt content \n{} ", inMessage.toString());
             WxMpXmlOutMessage outMessage = this.route(inMessage);
             if (outMessage == null) {
                 return "";
@@ -88,7 +93,7 @@ public class WxPortalController {
             out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
         }
 
-        log.debug("\n组装回复信息：{}", out);
+        log.debug("\n router handled message ：{}", out);
         return out;
     }
 
@@ -96,7 +101,7 @@ public class WxPortalController {
         try {
             return this.messageRouter.route(message);
         } catch (Exception e) {
-            log.error("路由消息时出现异常！", e);
+            log.error("router message error", e);
         }
 
         return null;

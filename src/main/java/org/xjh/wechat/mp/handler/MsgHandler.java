@@ -15,7 +15,8 @@ public class MsgHandler implements WxMpMessageHandler {
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) {
 
-        String content = "收到信息内容：" + JsonUtils.toJson(wxMessage);
+        String content = "Content Received：" + JsonUtils.toJson(wxMessage);
+
         return WxMpXmlOutMessage.TEXT().content(content)
                 .fromUser(wxMessage.getToUser()).toUser(wxMessage.getFromUser())
                 .build();

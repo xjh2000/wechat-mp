@@ -1,6 +1,5 @@
 package org.xjh.wechat.mp.config;
 
-import lombok.AllArgsConstructor;
 import me.chanjar.weixin.common.redis.JedisWxRedisOps;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -17,21 +16,26 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+
 @Configuration
 @EnableConfigurationProperties(WxMpProperties.class)
 public class WxMpConfiguration {
-//    private final LogHandler logHandler;
+    //    private final LogHandler logHandler;
 //    private final NullHandler nullHandler;
 //    private final KfSessionHandler kfSessionHandler;
 //    private final StoreCheckNotifyHandler storeCheckNotifyHandler;
 //    private final LocationHandler locationHandler;
 //    private final MenuHandler menuHandler;
     private final MsgHandler msgHandler;
-//    private final UnsubscribeHandler unsubscribeHandler;
+    //    private final UnsubscribeHandler unsubscribeHandler;
 //    private final SubscribeHandler subscribeHandler;
 //    private final ScanHandler scanHandler;
     private final WxMpProperties properties;
+
+    public WxMpConfiguration(MsgHandler msgHandler, WxMpProperties properties) {
+        this.msgHandler = msgHandler;
+        this.properties = properties;
+    }
 
     @Bean
     public WxMpService wxMpService() {
@@ -39,7 +43,7 @@ public class WxMpConfiguration {
 
         final List<WxMpProperties.MpConfig> configs = this.properties.getConfigs();
         if (configs == null) {
-            throw new RuntimeException("大哥，拜托先看下项目首页的说明（readme文件），添加下相关配置，注意别配错了！");
+            throw new RuntimeException("the wxMpService config fail!");
         }
 
         WxMpService service = new WxMpServiceImpl();
