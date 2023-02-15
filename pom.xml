@@ -81,6 +81,13 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -98,7 +105,10 @@
                             <tag>registry.cn-hangzhou.aliyuncs.com/xjh2000/wechat:${project.version}</tag>
                         </tags>
                         <env>
-                            <BPE_DELIM_JAVA_TOOL_OPTIONS xml:space="preserve"> </BPE_DELIM_JAVA_TOOL_OPTIONS><BPE_APPEND_JAVA_TOOL_OPTIONS>-Dfile.encoding=UTF-8 -Dspring.profiles.active=prod</BPE_APPEND_JAVA_TOOL_OPTIONS>
+                            <BPE_DELIM_JAVA_TOOL_OPTIONS xml:space="preserve"> </BPE_DELIM_JAVA_TOOL_OPTIONS>
+                            <BPE_APPEND_JAVA_TOOL_OPTIONS>-Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+                                -Dspring.profiles.active=prod
+                            </BPE_APPEND_JAVA_TOOL_OPTIONS>
                         </env>
                     </image>
                     <docker>
