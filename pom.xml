@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>3.0.2</version>
         <relativePath/>
     </parent>
     <groupId>org.xjh</groupId>
     <artifactId>wechat-mp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wx mp </name>
+    <name>wx mp</name>
     <description>project for wx mp with spring boot</description>
 
     <repositories>
@@ -26,8 +26,10 @@
             </snapshots>
         </repository>
     </repositories>
+
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
+        <weixin-java-mp.version>4.4.0</weixin-java-mp.version>
     </properties>
 
     <dependencies>
@@ -37,11 +39,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--weixin mp start-->
 
         <dependency>
             <groupId>com.github.binarywang</groupId>
-            <artifactId>wx-java-mp-spring-boot-starter</artifactId>
-            <version>4.4.0</version>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>${weixin-java-mp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.3.0</version>
         </dependency>
 
         <dependency>
@@ -50,15 +59,30 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--weixin mp end-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -66,6 +90,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
