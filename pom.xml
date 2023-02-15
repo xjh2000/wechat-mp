@@ -10,22 +10,10 @@
     </parent>
     <groupId>org.xjh</groupId>
     <artifactId>wechat-mp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>wx mp</name>
     <description>project for wx mp with spring boot</description>
 
-    <repositories>
-        <repository>
-            <id>spring</id>
-            <url>https://maven.aliyun.com/repository/spring</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <properties>
         <java.version>17</java.version>
@@ -97,7 +85,21 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <image>
+                        <name>registry.cn-hangzhou.aliyuncs.com/xjh2000/wechat</name>
+                        <publish>true</publish>
+                        <tags>
+                            <tag>registry.cn-hangzhou.aliyuncs.com/xjh2000/wechat:latest</tag>
+                            <tag>registry.cn-hangzhou.aliyuncs.com/xjh2000/wechat:${project.version}</tag>
+                        </tags>
 
+                    </image>
+                    <docker>
+                        <publishRegistry>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </publishRegistry>
+                    </docker>
                 </configuration>
             </plugin>
         </plugins>
